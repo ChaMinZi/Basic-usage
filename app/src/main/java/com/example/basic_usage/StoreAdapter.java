@@ -58,7 +58,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
             default:
         }
 
-        holder.distanceTextView.setText("1.0km");
+        holder.distanceTextView.setText(String.format("%.2fkm", store.getDistance()));
         holder.countTextView.setText(count);
         holder.countTextView.setTextColor(color);
         holder.remainTextView.setText(remainStat);

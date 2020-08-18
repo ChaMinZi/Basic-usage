@@ -1,11 +1,16 @@
 package com.example.basic_usage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Switch;
 
 import com.example.basic_usage.model.Store;
 import com.example.basic_usage.model.StoreInfo;
@@ -13,6 +18,7 @@ import com.example.basic_usage.repository.MaskService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<StoreInfo> call, Response<StoreInfo> response) {
                 List<Store> items = response.body().getStores();
-                adapter.updateItems(items);
+
+                // null을 제외하고 받을 수 있다.
+                adapter.updateItems(items.stream().filter(item -> item.getRemainStat() != null)
+                        .collect(Collectors.toList()));
+                getSupportActionBar().setTitle("마스트 재고 있는 곳 : " + items.size() + "");
             }
 
             @Override
@@ -54,5 +64,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure : ", t);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

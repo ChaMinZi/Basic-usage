@@ -1,5 +1,6 @@
 package com.example.basic_usage;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,39 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         Store store = mItems.get(position);
         holder.nameTextView.setText(store.getName());
         holder.addressTextView.setText(store.getAddr());
+
+        String remainStat = "충분";
+        String count = "100개 이상";
+        int color = Color.GREEN;
+        switch (store.getRemainStat()) {
+            case "plenty":
+                count = "100개 이상";
+                remainStat = "충분";
+                color = Color.GREEN;
+                break;
+            case "safe":
+                count = "30개 이상";
+                remainStat = "여유";
+                color = Color.YELLOW;
+                break;
+            case "few":
+                count = "2개 이상";
+                remainStat = "매진 임박";
+                color = Color.RED;
+                break;
+            case "empty":
+                count = "1개 이하";
+                remainStat = "재고 없음";
+                color = Color.GRAY;
+                break;
+            default:
+        }
+
         holder.distanceTextView.setText("1.0km");
-        holder.remainTextView.setText(store.getRemainStat());
-        holder.countTextView.setText("100개 이상");
+        holder.countTextView.setText(count);
+        holder.countTextView.setTextColor(color);
+        holder.remainTextView.setText(remainStat);
+        holder.remainTextView.setTextColor(color);
     }
 
     @Override

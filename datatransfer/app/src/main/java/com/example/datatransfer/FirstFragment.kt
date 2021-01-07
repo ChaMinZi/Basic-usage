@@ -15,10 +15,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 class FirstFragment : Fragment(R.layout.fragment_first) {
     val requestPermission = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) {
-            Toast.makeText(requireContext(), "성공", Toast.LENGTH_SHORT).show()
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { map ->
+        // !! 를 쓰기보다는 null 체크를 하는 것이 좋다.
+        if (map[Manifest.permission.ACCESS_FINE_LOCATION]!!) {
+            Toast.makeText(requireContext(),
+                "ACCESS_FINE_LOCATION 성공", Toast.LENGTH_SHORT).show()
+        }
+
+        if (map[Manifest.permission.READ_EXTERNAL_STORAGE]!!) {
+            Toast.makeText(requireContext(),
+                "READ_EXTERNAL_STORAGE 성공", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -26,8 +33,10 @@ class FirstFragment : Fragment(R.layout.fragment_first) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.button).setOnClickListener {
-            requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            requestPermission.launch(arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ))
         }
     }
-
 }

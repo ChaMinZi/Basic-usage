@@ -1,18 +1,37 @@
 package com.example.datatransfer
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.fragment.findNavController
+import androidx.activity.result.contract.ActivityResultContracts
 
 class FirstFragment : Fragment() {
+
+    val getContent = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) {
+        imageView.setImageURI(it)
+    }
+
+//    val startActivityForResult = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { activityResult ->
+//        activityResult.data?.let { intent ->
+//            intent.extras?.let { bundle ->
+//                Toast.makeText(requireContext(),
+//                    "result : ${bundle.getString("data", "world")}", Toast.LENGTH_SHORT)
+//            }
+//        }
+//    }
+
+    private lateinit var imageView: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,21 +43,11 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setFragmentResultListener("SecondToFirst") { requestKey, bundle ->
-            // bundle에서 데이터 가지고 오기
-            val data = bundle.getString("data", "")
-
-            Toast.makeText(requireContext(), data, Toast.LENGTH_SHORT).show()
-        }
+        imageView = view.findViewById(R.id.imageView)
 
         view.findViewById<Button>(R.id.button).setOnClickListener {
-
-            setFragmentResult(
-                "FirstToSecond",
-                bundleOf("data" to "hello")
-            )
-
-            findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
+            // MIME TYPE
+            getContent.launch("image/*")
         }
     }
 

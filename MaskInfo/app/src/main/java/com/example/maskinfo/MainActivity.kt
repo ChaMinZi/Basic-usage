@@ -8,7 +8,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val storeAdapter = StoreAdapter()
 
         var progressBar: ProgressBar = findViewById(R.id.progressBar)
-        var recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        findViewById<RecyclerView>(R.id.recycler_view)
             .apply {
                 layoutManager = LinearLayoutManager(
                     this@MainActivity,

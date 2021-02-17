@@ -6,7 +6,7 @@
 ## [Properties in interfaces](https://kotlinlang.org/docs/interfaces.html#properties-in-interfaces)
 
 * Java 8 버전부터는 구현부를 가질 수 있게 되었다. 이전 버전에서는 불가능하다.
-* Interface에서는 property에 값을 저장할 수 없습니다. 하지만 **val로 선언된 property는 getter를 통해 필요한 내용을 구현할 수 있습니다.
+* Interface에서는 property에 값을 저장할 수 없습니다. 하지만 **val로 선언된 property는 getter를 통해 필요한 내용을 구현할 수 있습니다.**
 
 ```kotlin
 interface MyInterface {

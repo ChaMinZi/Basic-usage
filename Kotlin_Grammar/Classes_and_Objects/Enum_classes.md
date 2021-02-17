@@ -18,22 +18,6 @@ enum class Color(val rgb: Int) {
 }
 ```
 
-## [Anonymous classes ( 무명 클래스 )](https://kotlinlang.org/docs/enum-classes.html#anonymous-classes)
-
-```kotlin
-enum class ProtocolState {
-    WAITING {
-        override fun signal() = TALKING
-    },
-
-    TALKING {
-        override fun signal() = WAITING
-    };
-
-    abstract fun signal(): ProtocolState
-}
-```
-
 ## [Implementing interfaces in enum classes](https://kotlinlang.org/docs/enum-classes.html#implementing-interfaces-in-enum-classes)
 
 ```kotlin
@@ -61,6 +45,24 @@ fun main() {
     
     for (grade in MemberType.values()) {  // 모든 값을 가져오기 위한 반복문 
         println("grade.name = ${grade.name}, prio = ${grade.prio}")
+}
+```
+
+## [Anonymous classes ( 무명 클래스 )](https://kotlinlang.org/docs/enum-classes.html#anonymous-classes)
+
+Enum constants는 기본 method를 재정의할 뿐만 아니라 해당 method를 사용하여 자체 익명 클래스를 선언할 수도 있습니다.
+
+```kotlin
+enum class ProtocolState {
+    WAITING {
+        override fun signal() = TALKING
+    },
+
+    TALKING {
+        override fun signal() = WAITING
+    };
+
+    abstract fun signal(): ProtocolState
 }
 ```
 

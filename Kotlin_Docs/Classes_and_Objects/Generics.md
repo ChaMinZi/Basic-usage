@@ -219,10 +219,8 @@ copy(ints, any)
 ```
 
 위의 코드에서 Array<T> 는 무공변(invariant)이므로 Array<Int>와 Array<Any>는 상관이 없다. ( 서로의 하위 타입이 아니다. )  
-
-copy 라는 함수는 우리가 기대하지 않은 것( 예를 들면 ClassCastException )을 발생시키지 않는다는 것을 컴파일러에게 전달할 필요가 있습니다.
-
-이 때 copy에 out을 추가하면 컴파일 에러가 발생하는 것을 막을 수 있다. 
+copy 라는 함수는 우리가 기대하지 않은 것( 예를 들면 ClassCastException )을 발생시키지 않는다는 것을 컴파일러에게 전달할 필요가 있습니다.  
+이 때, copy에 out을 추가하면 컴파일 에러가 발생하는 것을 막을 수 있다. 
 
 ```kotlin
 // kotlin

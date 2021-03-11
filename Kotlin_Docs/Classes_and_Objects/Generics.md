@@ -84,7 +84,7 @@ fun main(args: Array<String>) {
 
 ------------------
 
-Java에서는 generic type은 무변성(invariant) 입니다. 이것의 의미는 List<String>은 List<Object의 subtype이 아니라는 것입니다.  
+Java에서는 generic type은 무변성(invariant) 입니다. 이것의 의미는 List<String>은 List<Object>의 subtype이 아니라는 것입니다.  
 **Why??** 만약 `List`가 invariant 하지 않다면 배열보다 나을 것이 없기 때문입니다.  
 이는 아래의 코드를 통해 알 수 있습니다. 아래의 코드가 컴파일된다면 런타임에 예외가 발생합니다.  
 그래서 Java는 run-time safety를 위해서 이러한 것을 금지합니다.
@@ -231,8 +231,7 @@ fun copy(from: Array<out Any>, to: Array<Any>) { ... }
 
 ### 2) Star-projections
 
-in/out을 정하지 않고 추후에 결정합니다.
-
+in/out을 정하지 않고 추후에 결정합니다.  
 **어떤 자료형이라도 들어올 수 있으나 구체적으로 자료형이 결정되고 난 후에는 그 자료형과 하위 자료형의 요소만 담을 수 있도록 제한합니다.**
 
     * in으로 정의되어 있는 type parameter를 *로 받으면 in Nothing 인 것으로 간주한다.

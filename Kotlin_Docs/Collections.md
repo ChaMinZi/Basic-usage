@@ -181,3 +181,37 @@ fun main() {
     captialCityMap.puAll(addData) // 기존 Map에 새로운 Map 객체를 
 }
 ```
+
+-----------------------------------------
+# Standard library
+1. 연산자 ( Operators ) : 더하고 빼는 등의 기능
+2. 집계 ( aggregators ) : 최대, 최소. 집합. 총합 등의 계산 기능
+3. 검사 ( checks ) : 요소를 검사하고 순환하기 위한 기능
+4. 필터 ( filtering ) : 원하는 요소를 골라내기 위한 기능
+5. 변환 ( transformers ) : 뒤집기, 정렬, 자르기 등의 변환 기능
+
+| functions | 설명 |
+|-------------|-------------|
+|forEach | 각 요소를 람다식을 처리한 후 컬랙션을 반환하지 않음 |
+|forEachIndexed |  | 
+|onEach | 각 요소를 람다식으로 처리한 후 컬렉션을 반환 받음 |
+|fold | 초기값과 정해진 식에 따라 처음 요소부터 끝 요소에 적용해 값 반환|
+|reduce | fold와 동일하지만 초기값을 사용하지 않는다.|
+|foldRight |  |
+|reduceRight | reduce의 개념과 동일하지만 요소의 마지막(오른쪽) 요소에서 처음 요소로 순서대로 적용 |
+|filter |  |
+|filterNot | 식 이외에 요소 |
+|filterNotNull | null을 제외함 |
+|filterIndexed | 두 개의 인자를 람다식에서 받아서 각각 인덱스와 값에 대해 특정 수식에 맞는 조건을 골라낼 수 있다. |
+|filterIndexedTo | 여기에 컬랙션으로 반환되는 기능이 추가 |
+|slice | 특정 범위 잘라내기 |
+|take | n개의 요소를 반환 |
+|drop |  |
+|distinct | 여러 중복 요소가 있는 경우 한 개로 취급해 다시 컬렉션 List로 반환 |
+|intersect | 교집합 요소만 골라내 컬렉션 List로 반환 |
+|map | 컬렉션에 주어진 식을 적용해 새로운 컬렉션을 반환 |
+|mapIndexed | 컬렉션에 인덱스를 포함해 주어진 식을 적용해 새로운 컬렉션 반환 |
+|mapNotNull | null을 제외하고 식을 적용해 새로운 컬렉션 반환 |
+|flatMap() | 각 요소에 식을 적용 후 다시 합쳐 새로운 컬렉션을 반환 |
+|groupBy() | 주어진 식에 따라 요소를 그룹화하고 이것을 다시 Map으로 반환 |
+|element | 인덱스와 함께 해당 요소의 값을 반환한다. 인덱스를 벗어나면 null을 반환한다.|

@@ -12,6 +12,45 @@
 
 기존의 작업에서 I/O 작업이 발생하면 blocking 상태로 전환되는 것이 아니라 다른 일을 처리하면서 기다리는 것
 
+# [Thread](https://www.boostcourse.org/mo234/lecture/154328)
+--------------------------
+* Thread 생성 4가지 방법
+```kotlin
+// 1. 클래스
+class SimpleThread : Thread() {
+   override fun run() {
+       println("Class Thread ${Thread.currentThread()}")
+   }
+}
+
+// 2. 인터페이스
+class SimpleRunnable : Runnable {
+   override fun run() {
+       println("Interface Thread ${Thread.currentThread()}")
+   }
+}
+
+fun main() {
+    val thread = SimpleThread()
+    thread.start()
+    
+    val runnable = SimpleFunnable()
+    val thread2 = Thread(runnable)
+    thread2.start()
+    
+    // 3. 익명객체
+    object : Thread() {
+        override fun run() {
+            println("object Thread ${Thread.currentThread()}")
+        }
+    }
+    
+    // 4. 람다식
+    Thread {
+        println("Lambda Thread ${Thread.currentThread()}")
+    }
+}
+```
 
 ## 출처
 -------------------------

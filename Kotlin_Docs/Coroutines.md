@@ -28,11 +28,12 @@
 | coroutineScope / supervisorScope | 범위 빌더 |
 | select | 표현식 지원 |
 
-### [launch](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine)
-1. 일단 실행하고 잊어버지는(fire and forget) 형태의 코루틴 ( = 메인 프로그램과 독립적으로 실행할 수 있습니다. )
-2. 기본적으로 즉시 실행하며 블록 내의 **실행 결과는 반환하지 않습니다.**
-3. 상위 코드를 블록시키지 않고(= Non blocking) 관리를 위한 Job 객체를 즉시 반환합니다.
-4. join을 통해 상위 코드가 종료되지 않고 완료를 기다리게 할 수 있습니다.</br>( = 메인 코드에 launch를 실행하고 곧바로 메인 프로그램이 중단되면 launch가 사라져버립니다. 하지만 launch를 사용하는 경우 main은 종료되지 않고 launch가 종료될 때 까지 기다립니다.
+* ### [launch](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine)
+ 1. 일단 실행하고 잊어버지는(fire and forget) 형태의 코루틴 ( = 메인 프로그램과 독립적으로 실행할 수 있습니다. )
+ 2. 기본적으로 즉시 실행하며 블록 내의 **실행 결과는 반환하지 않습니다.**
+ 3. 상위 코드를 블록시키지 않고(= Non blocking) 관리를 위한 Job 객체를 즉시 반환합니다.
+ 4. join을 통해 상위 코드가 종료되지 않고 완료를 기다리게 할 수 있습니다.</br>( = 메인 코드에 launch를 실행하고 곧바로 메인 프로그램이 중단되면 launch가 사라져버립니다. 하지만 launch를 사용하는 경우 main은 종료되지 않고 launch가 종료될 때 까지 기다립니다.
+ 5. launch 블록 내에서 코드가 순차적으로 진행됩니다.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -47,25 +48,110 @@ fun main() { // 메인 스레드 문맥
 }
 ```
 ```kotlin
+/*
+   * join을 이용하여 결과 기다리기
+*/
 import kotlinx.coroutines.*
 
-fun main() { 
-    GlobalScope.launch { // launch a new coroutine in background and continue
-        delay(1000L)
-        println("World!")
+fun main() {
+    runBlocking<Unit> { // 하위의 자식이 완료될 때까지 기다리게 하는 coroutine 블록
+        val job = launch { // Job 객체를 반환한다.
+            delay(1000L)
+            println("World!")
+        }
+        println("Hello")
+        job.join() // 명시적으로 코루틴이 완료되기를 기다림. 취소할 경우 job.cancle()을 사용
     }
-    println("Hello,") // main thread continues here immediately
-    runBlocking {     // but this expression blocks the main thread
-        delay(2000L)  // ... while we delay for 2 seconds to keep JVM alive
-    } 
 }
 ```
 
-### async
- 1. 비동기 호출을 위해 만든 코루틴으로 결과나 예외를 반환한다.
+* ### suspend
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() {
+    GlobalScope.launch {
+        delay(1000L)
+        println("World!")
+        doSomething()
+    }
+    println("Hello ")
+    Thread.sleep(2000L)
+}
+
+suspend fun doSomething() {
+    println("Do Something")
+}
+```
+
+* ### Job
+  * 백그라운드에서 실행하는 작업
+  * 코루틴의 생명주기를 관리하며 생성된 코루틴 작업들은 부모-자식과 같은 관계를 가질 수 있습니다.
+  * 부모가 취소되거나 실행 실패할 경우 하위 자식들은 모두 취소됩니다.
+  * 자식의 실행 실패는 해당 부모에게 전달되며 부모 또한 실행 실패합니다. ( 따라서 모든 자식의 실행도 취소됩니다. )
+  * **SupervisorJob**을 사용할 경우 자식의 실행 실패가 해당 부모에게 전달되지 않으므로 실행을 유지할 수 있습니다. 
+ 
+ * 상황을 판별하기 위한 상태
+![image](https://user-images.githubusercontent.com/29828988/111337280-4e8f0680-86b9-11eb-947b-1538ba4deb7c.png)
+###### ( 출처 : [부스트코스](https://www.boostcourse.org/mo234/lecture/154330) )
+
+```kotlin
+println("job: ${job.isActive}, ${job.isCompleted}"}
+```
+
+* ### 중단 ( Coroutine Code 내에서 )
+  * `delay(timeValue)` : 일정 시간을 지연(Non-blocking)하며 중단
+  * `yield()` : 특정 값을 산출하기 위해 중단
+
+* ### 취소 ( Coroutine Code 외부에서 )
+  * `Job.cancel()` : 지정된 코루틴 작업을 즉시 취소
+  * `Job.cancelAndJoin()` : 지정된 코루틴 작업을 취소 ( 완료시까지 기다림 )
+
+
+* ### async
+ 1. **비동기 호출을 위해** 만든 코루틴으로 결과나 예외를 반환한다.
  2. 실행 결과는 Deffered<T>를 통해 반환하며 await을 통해 받을 수 있다.
  3. await은 작업이 완료될 때까지 기다리게 된다.
 
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+suspend fun doWork1(): String {
+    delay(1000)
+    return "Work1"
+}
+
+suspend fun doWork2(): String {
+    delay(3000)
+    return "Work2"
+}
+
+private fun worksInParallel(): Job {
+    // Deferred<T> 를 통해 결과값을 반환
+    val one = GlobalScope.async {
+        doWork1()
+    }
+    val two = GlobalScope.async {
+        doWork2()
+    }
+
+    return GlobalScope.launch {
+        // 지연된 결과를 받기 위해 await를 사용
+        val combined = one.await() + "_" + two.await()
+        println("Kotlin Combined : $combined")
+    }
+}
+
+fun main() = runBlocking<Unit> { // 하위의 자식이 완료될 때까지 기다리게 하는 coroutine 블록
+    val time = measureTimeMillis {
+        val job = worksInParallel()
+        job.join()
+    }
+    println("time: $time")
+}
+```
+태스크들이 병행 수행되므로 어떤 루틴이 먼저 종료될 지 알기 어렵습니다. 따라서 태스크가 종료되는 시점을 기다렸다가 결과를 받을 수 있도록 await()를 사용해 현재 스레드의 블로킹 없이 먼저 종료되면 결과를 가져올 수 있습니다.
 
 </br>
 
@@ -79,7 +165,6 @@ fun main() {
 ## 라이브러리 추가하기
 
 ![image](https://user-images.githubusercontent.com/29828988/111326560-fef80d00-86af-11eb-804b-c167a5fb70e6.png)
-
 
 -------------------------
 

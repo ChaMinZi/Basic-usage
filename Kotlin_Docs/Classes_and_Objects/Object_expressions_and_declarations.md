@@ -1,7 +1,7 @@
 # [Object expressions and declarations](https://kotlinlang.org/docs/object-declarations.html)
 
 > [object와 class 키워드의 차이점](https://codechacha.com/ko/kotlin-object-vs-class/)  
-> [[Kotlin] Object 키워드, 식(Expressions), 선언(Declarations)](https://shinjekim.github.io/kotlin/2019/09/04/Kotlin-Object-%ED%82%A4%EC%9B%8C%EB%93%9C,-%EC%8B%9D(Expressions),-%EC%84%A0%EC%96%B8(Declarations)/)
+> [[Kotlin] Object 키워드, 식(Expressions), 선언(Declarations)](https://shinjekim.github.io/kotlin/2019/09/04/Kotlin-Object-%ED%82%A4%EC%9B%8C%EB%93%9C,-%EC%8B%9D(Expressions),-%EC%84%A0%EC%96%B8(Declarations)/)  
 > [코틀린에는 static이 없다? - companion object](https://androidhuman.com/2016-07-10-kotlin_companion_object)
 
 # Object expressions

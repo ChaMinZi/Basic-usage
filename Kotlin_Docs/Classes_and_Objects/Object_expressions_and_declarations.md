@@ -2,6 +2,7 @@
 
 > [object와 class 키워드의 차이점](https://codechacha.com/ko/kotlin-object-vs-class/)  
 > [[Kotlin] Object 키워드, 식(Expressions), 선언(Declarations)](https://shinjekim.github.io/kotlin/2019/09/04/Kotlin-Object-%ED%82%A4%EC%9B%8C%EB%93%9C,-%EC%8B%9D(Expressions),-%EC%84%A0%EC%96%B8(Declarations)/)
+> [코틀린에는 static이 없다? - companion object](https://androidhuman.com/2016-07-10-kotlin_companion_object)
 
 # Object expressions
 
@@ -120,7 +121,7 @@ fun countClicks(window: JComponent) {
 }
 ```
 
-## Object delarations ( 객체 선언 )
+## Object declarations ( 객체 선언 )
 
 코틀린(after Scala)에서는 싱글턴(singleton)을 쉽게 선언할 수 있도록 지원해줍니다.
 
@@ -151,5 +152,7 @@ object DefaultListener : MouseAdapter() {
     override fun mouseEntered(e: MouseEvent) { ... }
 }
 ```
+
+주의: Object는 지역적으로 선언될 수는 없으나, 다른 object 선언이나 내부(inner) 클래스가 아닌 곳에 중첩될 수 있습니다.
 
 ## Companion objects
